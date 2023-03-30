@@ -80,6 +80,32 @@ app.delete('/envelopes/:id', (req, res) => {
     return res.status(200).json({ message: `Envelope with ID ${id} deleted successfully`, envelope: deletedEnvelope });
   });
 
+// Endpoint to transfer funds from one envelope to another
+app.post('/envelopes/transfer/:from/:to', (req, res) => {
+    const { from, to } = req.params;
+    const { amount } = req.body;
+  
+    // Find the envelopes to transfer funds from and to
+    const fromEnvelope = envelopes.find(e => e.id === Number(from));
+    const toEnvelope = envelopes.find(e => e.id === Number(to));
+  
+    // Check if both envelopes exist
+    if (!fromEnvelope || !toEnvelope) {
+      return res.status(404).json({ error: 'Both envelopes must exist' });
+    }
+  
+    // Check if there is enough money in the 'from' envelope
+    if (fromEnvelope.budget < amount) {
+        return res.status(400).json({ error: 'Not enough funds in envelope to transfer' });
+        }
+        
+        // Transfer the funds
+        fromEnvelope.budget -= amount;
+        toEnvelope.budget += amount;
+        
+        return res.status(200).json({ message: Transferred ${amount} from envelope ${fromEnvelope.title} to envelope ${toEnvelope.title}, envelopes });
+        });
+
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });
