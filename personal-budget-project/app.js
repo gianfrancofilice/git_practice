@@ -32,6 +32,18 @@ app.get('/envelopes', (req, res) => {
     return res.status(200).json(envelopes);
   });
 
+// Endpoint to retrieve a specific envelope by ID
+app.get('/envelopes/:id', (req, res) => {
+    const { id } = req.params;
+    const envelope = envelopes.find(e => e.id === Number(id));
+  
+    if (!envelope) {
+      return res.status(404).json({ error: `Envelope with ID ${id} not found` });
+    }
+  
+    return res.status(200).json(envelope);
+  });
+
 app.get('/', (req, res) => {
   res.send('Hello, World');
 });
