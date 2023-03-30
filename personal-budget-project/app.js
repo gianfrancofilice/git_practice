@@ -48,6 +48,23 @@ app.get('/', (req, res) => {
   res.send('Hello, World');
 });
 
+// Endpoint to update a specific envelope by ID
+app.put('/envelopes/:id', (req, res) => {
+    const { id } = req.params;
+    const { title, budget } = req.body;
+    const envelope = envelopes.find(e => e.id === Number(id));
+  
+    if (!envelope) {
+      return res.status(404).json({ error: `Envelope with ID ${id} not found` });
+    }
+  
+    const updatedEnvelope = { ...envelope, title, budget };
+    const envelopeIndex = envelopes.findIndex(e => e.id === Number(id));
+    envelopes[envelopeIndex] = updatedEnvelope;
+  
+    return res.status(200).json({ message: `Envelope with ID ${id} updated successfully`, envelope: updatedEnvelope });
+  });
+
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });
