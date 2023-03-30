@@ -65,6 +65,21 @@ app.put('/envelopes/:id', (req, res) => {
     return res.status(200).json({ message: `Envelope with ID ${id} updated successfully`, envelope: updatedEnvelope });
   });
 
+// Endpoint to delete a specific envelope by ID
+app.delete('/envelopes/:id', (req, res) => {
+    const { id } = req.params;
+    const envelopeIndex = envelopes.findIndex(e => e.id === Number(id));
+  
+    if (envelopeIndex === -1) {
+      return res.status(404).json({ error: `Envelope with ID ${id} not found` });
+    }
+  
+    const deletedEnvelope = envelopes.splice(envelopeIndex, 1)[0];
+    totalBudget -= deletedEnvelope.budget;
+  
+    return res.status(200).json({ message: `Envelope with ID ${id} deleted successfully`, envelope: deletedEnvelope });
+  });
+
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });
