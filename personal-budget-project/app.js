@@ -27,6 +27,11 @@ app.post('/envelopes', (req, res) => {
   return res.status(201).json({ message: 'Envelope created successfully', envelope });
 });
 
+// Endpoint to retrieve all envelopes
+app.get('/envelopes', (req, res) => {
+    return res.status(200).json(envelopes);
+  });
+
 app.get('/', (req, res) => {
   res.send('Hello, World');
 });
